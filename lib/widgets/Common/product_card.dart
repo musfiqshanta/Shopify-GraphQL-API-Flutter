@@ -1,10 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    super.key,
-  });
+  String title,image;
+   
+  ProductCard({super.key, required this.title,required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +25,15 @@ class ProductCard extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Image.network(
-                      "https://cdn.shopify.com/s/files/1/0706/7956/0502/files/Untitled-2_536020a5-4ed4-43b7-9c7f-48c20022d11a_830x550.png?v=1673417388",
+                      image,
                       fit: BoxFit.cover,
                     )),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Car Cute Little Yellow Duck With",
+              Text(
+                title,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(

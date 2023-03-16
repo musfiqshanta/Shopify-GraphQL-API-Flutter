@@ -1,13 +1,22 @@
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:topautoupgrades/screens/homepage.dart';
+import 'api/graphql_confiq.dart';
+import 'model/products_model.dart';
 import 'screens/account.dart';
 import 'screens/cart.dart';
 import 'screens/shop.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-void main() {
+void main() async {
+  // Load the access token as per instructions above
+
+  await initHiveForFlutter();
+
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -17,7 +26,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Top Auto Upgrades',
       theme: ThemeData(
         primaryColor: Color(0xfff68220),
@@ -45,6 +54,8 @@ class _MainPageState extends State<MainPage> {
       _counter++;
     });
   }
+
+  final repos = GraphQLConfig();
 
   @override
   Widget build(BuildContext context) {
@@ -95,16 +106,16 @@ class _MainPageState extends State<MainPage> {
         ],
         onChange: _handleNavigationChange,
       ),
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).primaryColor,
-      //   title: Text(
-      //     widget.title,
-      //     style: TextStyle(
-      //       fontSize: 22,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          widget.title,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: _child,
     );
   }

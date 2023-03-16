@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import '../api/graphql_confiq.dart';
+import '../model/products_model.dart';
 import '../widgets/Common/category.dart';
 import '../widgets/Common/product_card.dart';
 import '../widgets/Common/recomanded.dart';
@@ -53,15 +57,36 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ),
-            Wrap(
-              //runAlignment: WrapAlignment.spaceBetween,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: const [
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-              ],
+            FutureBuilder<List<ShopifyProduct>>(
+              future: GraphQLConfig.fetchAllProducts(4),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final products = snapshot.data!;
+                  print(products.length);
+                  return Wrap(
+                    //runAlignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: List.generate(4, (index) {
+                      final product = products[index];
+                      String title = product.title;
+                      String image = product.imageSrc;
+
+                      return ProductCard(
+                        title: title,
+                        image: product.imageSrc,
+                      );
+                    }),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
             SizedBox(
               height: 20,
